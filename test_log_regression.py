@@ -75,3 +75,38 @@ class TestLogRegression(unittest.TestCase):
         self.log_regression.fit(x_train, y_train, 5000)
         prediction = self.log_regression.predict(x_test)
         np.testing.assert_equal(y_test, prediction)
+
+    def test_evaluate(self):
+        """Test evaluate."""
+        # Train with a simple y = x (below the line is labelled 1)
+        x_train = np.array(
+            [[1, 0.9],
+             [2, 2.1],
+             [3, 2.9],
+             [4, 4.1],
+             [5, 4.9],
+             [6, 6.1],
+             [7, 6.9],
+             [8, 8.1],
+             [9, 8.9],
+             [10, 10.1]
+             ])
+        y_train = np.array([1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
+        self.log_regression.alpha = 0.1
+        self.log_regression.fit(x_train, y_train, 5000)
+        # Evaluate the test data
+        x_test = np.array(
+            [[1, 0.9], [2, 2.9], [3, 2.9], [4, 5.9], [5, 4.9],
+             [6, 6.9], [7, 1.9], [8, 9.9], [9, 7.9], [10, 11.9]
+             ])
+        # The predicted labels will produce this:
+        # y_test = np.array([1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
+        # Let's mess up a bit the ground truth
+        # conf should be:
+        #   0 1
+        # 0 3 1
+        # 1 2 4
+        y_test = np.array([1, 1, 1, 0, 0, 0, 1, 0, 1, 1])
+        acc, conf = self.log_regression.evaluate(x_test, y_test, verbose=True)
+        self.assertEqual(acc, 0.7)
+        np.testing.assert_array_equal(conf, np.array([[3, 1], [2, 4]]))
