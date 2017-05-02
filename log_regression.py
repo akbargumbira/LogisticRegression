@@ -74,8 +74,8 @@ class LogisticRegression(object):
         m = x.shape[0]
         # Add 1 to the x[0]
         x = np.concatenate((np.ones((m, 1)), x), axis=1)
-        # Random the theta in the range [0, 1]
-        self.theta = np.random.rand(x.shape[1])
+        # Random the theta in the range [-1, 1]
+        self.theta = 2*np.random.rand(x.shape[1])-1
         for i in range(epochs):
             h = self.h(x)
             self.theta -= (self.alpha/m) * np.dot(x.T, h - y)
