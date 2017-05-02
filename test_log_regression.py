@@ -18,7 +18,7 @@ class TestLogRegression(unittest.TestCase):
     def test_h(self):
         """Test the hypothesis function."""
         self.log_regression.theta = np.array([0, 1, -1, 5, -5])
-        x = np.array([1, 2, 2, 2, 2])
+        x = np.array([[1, 2, 2, 2, 2]])
         output = self.log_regression.h(x)
         self.assertEqual(output, 0.5)
 

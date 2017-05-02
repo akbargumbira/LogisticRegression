@@ -17,6 +17,8 @@ class LogisticRegression(object):
         """
         self.alpha = float(alpha)
         self.theta = None
+        # The cost log for each epoch
+        self.cost_log = []
 
     @staticmethod
     def g(z):
@@ -25,6 +27,9 @@ class LogisticRegression(object):
         :param z: The input array/number.
         :type z: numpy.ndarray
          """
+        # For z < -709, (1 + np.exp(-z)) will give inf
+        # To avoid runtime warning
+        z[z < -709] = -709
         return 1/(1 + np.exp(-z))
 
     def h(self, x):
@@ -54,6 +59,9 @@ class LogisticRegression(object):
         :return: The cost for this hypothesis.
         :rtype: numpy.ndarray
         """
+        # Avoid RunTimeWarning
+        h[h == 0] = 10**-10
+        h[h == 1] = 0.9999999
         return -y.dot(np.log(h)) - ((1 - y).dot(np.log(1 - h)))
 
     def fit(self, x, y, epochs, verbose=False):
@@ -79,8 +87,10 @@ class LogisticRegression(object):
         for i in range(epochs):
             h = self.h(x)
             self.theta -= (self.alpha/m) * np.dot(x.T, h - y)
+            cost = self.cost(h, y)
+            self.cost_log.append(cost)
             if verbose:
-                print 'Cost epoch %s: %s' % (i, self.cost(h, y))
+                print 'Cost epoch %s: %s' % (i, cost)
 
     def predict(self, x):
         """Predict labels for data x.
