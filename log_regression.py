@@ -27,8 +27,7 @@ class LogisticRegression(object):
         :param z: The input array/number.
         :type z: numpy.ndarray
          """
-        # For z < -709, (1 + np.exp(-z)) will give inf
-        # To avoid runtime warning
+        # For z < -709, (1 + np.exp(-z)) will give inf to avoid RuntimeWarning
         z[z < -709] = -709
         return 1/(1 + np.exp(-z))
 
@@ -59,9 +58,9 @@ class LogisticRegression(object):
         :return: The cost for this hypothesis.
         :rtype: numpy.ndarray
         """
-        # Avoid RunTimeWarning
-        h[h == 0] = 10**-10
-        h[h == 1] = 0.9999999
+        # Avoid RunTimeWarning by np.log(0)
+        h[h == 0] = 10**-16
+        h[h == 1] = 1-10**-16
         return -y.dot(np.log(h)) - ((1 - y).dot(np.log(1 - h)))
 
     def fit(self, x, y, epochs, verbose=False):
