@@ -9,7 +9,7 @@ except ImportError:
 from setuptools import setup, find_packages
 
 setup(
-    name='logistic-regression',
+    name='log_regression',
     version='0.1',
     author='Akbar Gumbira',
     author_email='akbargumbira@gmail.com',
